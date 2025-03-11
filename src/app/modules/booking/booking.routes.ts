@@ -5,16 +5,14 @@ import { UserRole } from "../user/user.interface";
 
 const router = express.Router();
 
-router.get("/", BookingController.getAllBookings);
-router.get("/:id", BookingController.getBookingByIds);
 router.get(
-  "/student/:studentId",
-  auth(UserRole.STUDENT, UserRole.TUTOR),
+  "/student-request",
+  auth(UserRole.STUDENT ),
   BookingController.getBookingsByStudentId
 );
 router.get(
-  "/tutor/:tutorId",
-  auth(UserRole.STUDENT, UserRole.TUTOR),
+  "/tutor-accept",
+  auth( UserRole.TUTOR),
   BookingController.getBookingsByTutorId
 );
 router.post("/", auth(UserRole.STUDENT), BookingController.createBooking);
@@ -39,4 +37,4 @@ router.patch(
   BookingController.updateBookingPaymentStatus
 );
 
-export default router;
+export const Booking = router ;

@@ -9,7 +9,6 @@ import { AuthService } from "../auth/auth.service";
 import { IImageFile } from "../../interface/IImageFile";
 import { IJwtPayload } from "../auth/auth.interface";
 
-
 // Function to register user
 const registerUser = async (userData: IUser) => {
   const session = await mongoose.startSession();
@@ -70,11 +69,8 @@ const getAllUser = async (query: Record<string, unknown>) => {
   };
 };
 
-
-
 const updateProfile = async (
   payload: Partial<IUser>,
-  file: IImageFile,
   authUser: IJwtPayload
 ) => {
   const isUserExists = await User.findById(authUser.userId);
@@ -86,20 +82,19 @@ const updateProfile = async (
     throw new AppError(StatusCodes.BAD_REQUEST, "User is not active!");
   }
 
-  if (file && file.path) {
-    payload.photo = file.path;
-  }
 
-  const result = await User.findOneAndUpdate(
-    { user: authUser.userId },
-    payload,
-    {
-      new: true,
-    }
-  ).populate("user");
+  const result = await User.findByIdAndUpdate(authUser.userId, payload, {
+    new: true, 
+    runValidators: true, 
+  });
+
+  if (!result) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Profile update failed!");
+  }
 
   return result;
 };
+
 
 const updateUserStatus = async (userId: string) => {
   const user = await User.findById(userId);
@@ -135,5 +130,5 @@ export const UserServices = {
   getAllUser,
   updateUserStatus,
   myProfile,
-  updateProfile
+  updateProfile,
 };

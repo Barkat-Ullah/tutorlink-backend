@@ -14,7 +14,7 @@ router.get(
 
 router.post("/", UserController.registerUser);
 router.patch(
-  "/update-profile",
+  "/:id",
   auth(UserRole.STUDENT),
   
   UserController.updateProfile

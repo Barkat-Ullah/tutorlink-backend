@@ -3,6 +3,7 @@ import { IBooking } from "./booking.interface";
 import { BookingService } from "./booking.services";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
+import { JwtPayload } from "jsonwebtoken";
 
 export const createBooking = catchAsync(async (req: Request, res: Response) =>
   sendResponse(res, {
@@ -50,23 +51,28 @@ export const getAllBookings = catchAsync(async (req: Request, res: Response) =>
 );
 
 export const getBookingsByStudentId = catchAsync(
-  async (req: Request, res: Response) =>
+  async (req: Request, res: Response) => {
+    const { userId } = req.user as JwtPayload; // Now inside the function
     sendResponse(res, {
       statusCode: 200,
       success: true,
       message: "Bookings retrieved for the student",
-      data: await BookingService.getBookingsByStudentId(req.params.studentId),
-    })
+      data: await BookingService.getBookingsByStudentId(userId),
+    });
+  }
 );
 
+// ✅ Fixed getBookingsByTutorId
 export const getBookingsByTutorId = catchAsync(
-  async (req: Request, res: Response) =>
+  async (req: Request, res: Response) => {
+    const { userId } = req.user as JwtPayload; 
     sendResponse(res, {
       statusCode: 200,
       success: true,
       message: "Bookings retrieved for the tutor",
-      data: await BookingService.getBookingsByTutorId(req.params.tutorId),
-    })
+      data: await BookingService.getBookingsByTutorId(userId),
+    });
+  }
 );
 
 export const updateBookingStatus = catchAsync(

@@ -6,6 +6,7 @@ import { DistrictRoutes } from "../modules/zilla/zilla.routes";
 import { TutorRoutes } from "../modules/tutor/tutor.routes";
 import { SubjectRoutes } from "../modules/subject/subject.routes";
 import { orderRouter } from "../modules/order/order.routes";
+import { Booking } from "../modules/booking/booking.routes";
 
 
 const router = Router();
@@ -38,6 +39,10 @@ const moduleRoutes = [
   {
     path: "/orders",
     route: orderRouter,
+  },
+  {
+    path: "/booking",
+    route: Booking,
   },
 ];
 

@@ -66,6 +66,7 @@ export const getAllBookings = async (): Promise<IBooking[]> => {
 const getBookingsByStudentId = async (
   studentId: string
 ): Promise<IBooking[]> => {
+  console.log(studentId)
   if (!mongoose.Types.ObjectId.isValid(studentId)) {
     throw new Error("Invalid Student ID format");
   }
