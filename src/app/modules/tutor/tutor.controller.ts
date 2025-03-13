@@ -37,6 +37,7 @@ const getSingleTutor = catchAsync(async (req, res) => {
 });
 const updateTutors = catchAsync(async (req, res) => {
   const result = await TutorService.updateTutor(req.params.id, req.body);
+  console.log(result);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -54,10 +55,21 @@ const deleteTutors = catchAsync(async (req, res) => {
   });
 });
 
+const myTutorProfile = catchAsync(async (req, res) => {
+  const result = await TutorService.myTutorProfile(req.user as IJwtPayload);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Profile retrieved successfully",
+    data: result,
+  });
+});
 export const TutorController = {
   createTutors,
   getAllTutor,
   getSingleTutor,
   updateTutors,
   deleteTutors,
+  myTutorProfile,
 };

@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 import { AuthService } from "../auth/auth.service";
 import { IImageFile } from "../../interface/IImageFile";
 import { IJwtPayload } from "../auth/auth.interface";
+import jwt from "jsonwebtoken";
+import config from "../../config";
 
 // Function to register user
 const registerUser = async (userData: IUser) => {
@@ -82,10 +84,9 @@ const updateProfile = async (
     throw new AppError(StatusCodes.BAD_REQUEST, "User is not active!");
   }
 
-
   const result = await User.findByIdAndUpdate(authUser.userId, payload, {
-    new: true, 
-    runValidators: true, 
+    new: true,
+    runValidators: true,
   });
 
   if (!result) {
@@ -94,7 +95,6 @@ const updateProfile = async (
 
   return result;
 };
-
 
 const updateUserStatus = async (userId: string) => {
   const user = await User.findById(userId);
@@ -108,6 +108,7 @@ const updateUserStatus = async (userId: string) => {
   const updatedUser = await user.save();
   return updatedUser;
 };
+
 const myProfile = async (authUser: IJwtPayload) => {
   const isUserExists = await User.findById(authUser.userId);
   if (!isUserExists) {
@@ -130,5 +131,5 @@ export const UserServices = {
   getAllUser,
   updateUserStatus,
   myProfile,
-  updateProfile,
+  updateProfile
 };

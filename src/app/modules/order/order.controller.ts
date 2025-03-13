@@ -11,7 +11,7 @@ const createOrderInfo = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: "Order created successfully",
+    message: "Payment created successfully",
     data: { checkout_url: result },
   });
 });

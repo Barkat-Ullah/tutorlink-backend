@@ -9,12 +9,10 @@ import { IImageFile } from "../../interface/IImageFile";
 import { checkAvailabilityConflict } from "./tutor.utils";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { TutorSearchableFields } from "./tutor.constants";
+import jwt from 'jsonwebtoken';
 
 export const TutorService = {
-  async createTutor(
-    data: ITutor,
-    authUser: IJwtPayload
-  ) {
+  async createTutor(data: ITutor, authUser: IJwtPayload) {
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -60,6 +58,13 @@ export const TutorService = {
         { role: "tutor" },
         { new: true, session }
       );
+     const payload = {
+       userId: existingUser._id,
+       email: existingUser.email,
+       role: "tutor",
+     };
+
+    
 
       // Commit the transaction
       await session.commitTransaction();
@@ -133,6 +138,34 @@ export const TutorService = {
 
     return await TutorModel.findByIdAndUpdate(id, updates, { new: true });
   },
+async myTutorProfile(authUser: IJwtPayload) {
+  const user = await User.findById(authUser.userId);
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, "User not found!");
+  }
+
+  if (!user.isActive) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "User is not active!");
+  }
+
+  // Check if the user is a tutor
+  if (user.role !== "tutor") {
+    throw new AppError(StatusCodes.FORBIDDEN, "Access denied! Not a tutor.");
+  }
+
+  // Find tutor profile with populated fields
+  const profile = await TutorModel.findOne({ user: user._id })
+    .populate("subjects") 
+    .populate("division") 
+    .populate("district") 
+    .populate("user", "name email");
+
+  if (!profile) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Tutor profile not found!");
+  }
+
+  return profile;
+},
 
   async deleteTutor(id: string) {
     return await TutorModel.findByIdAndDelete(id);

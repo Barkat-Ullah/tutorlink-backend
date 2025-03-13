@@ -26,4 +26,5 @@ router.patch(
   UserController.updateUserStatus
 );
 
+
 export const UserRoutes = router;

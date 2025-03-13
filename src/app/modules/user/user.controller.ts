@@ -3,9 +3,8 @@ import { UserServices } from "./user.service";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
-import { IImageFile } from "../../interface/IImageFile";
 import config from "../../config";
-import { IJwtPayload } from "../auth/auth.interface";
+import { IJwtPayload } from '../auth/auth.interface';
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.registerUser(req.body);
@@ -78,10 +77,12 @@ const updateProfile = catchAsync(async (req, res) => {
   });
 });
 
+
 export const UserController = {
   registerUser,
   getAllUser,
   updateUserStatus,
   updateProfile,
   myProfile,
+
 };

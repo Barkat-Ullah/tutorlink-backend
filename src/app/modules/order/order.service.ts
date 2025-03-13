@@ -3,9 +3,8 @@ import { IOrder } from "./order.interface";
 import { Order } from "./order.model";
 import { orderUtils } from "./order.utils";
 
-
 const createOrder = async (orderData: IOrder, client_ip: string) => {
-  const { subjectId, userId,totalPrice } = orderData;
+  const { subjectId, userId, totalPrice } = orderData;
   const user = await User.findById(userId).select(
     "name email city address phone"
   );
@@ -25,8 +24,8 @@ const createOrder = async (orderData: IOrder, client_ip: string) => {
     customer_name: user?.name,
     customer_address: user?.address,
     customer_email: user?.email,
-    customer_phone:  "017*********",
-    customer_city: 'unknown',
+    customer_phone: "017*********",
+    customer_city: "unknown",
     client_ip,
   };
 
