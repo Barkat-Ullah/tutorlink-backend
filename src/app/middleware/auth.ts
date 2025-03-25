@@ -44,7 +44,12 @@ const auth = (...requiredRoles: UserRole[]) => {
           )
         );
       }
-      return next(new AppError(StatusCodes.UNAUTHORIZED, "Invalid token!"));
+      return next(
+        new AppError(
+          StatusCodes.UNAUTHORIZED,
+          "Token has expired! Please login again."
+        )
+      );
     }
   });
 };
